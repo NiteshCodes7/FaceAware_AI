@@ -1,0 +1,22 @@
+# FaceAware AI
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+node_modules/
+.next/
+.env
+.env.local
+ml/outputs/
+outputs/
+*.jpg
+*.jpeg
+*.png
+*.pt
+*.pth
+*.onnx
+*.ckpt
+models/
+datasets/
+runs/
