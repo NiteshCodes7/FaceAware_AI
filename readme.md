@@ -4,6 +4,27 @@
 
 FaceAware AI is a computer-vision application that performs **region-aware facial image enhancement**. Instead of applying a single global beauty filter to the entire image, the system identifies individual facial regions and applies specialized enhancement techniques with **independent user-controlled strength**.
 
+## Structure
+- `ml/` FastAPI backend and enhancement pipeline
+- `frontend/` Next.js UI
+
+## Run
+    # backend
+    cd ml
+    python -m venv venv && venv\Scripts\activate
+    pip install -r requirements.txt
+    python scripts/download_weights.py
+    uvicorn main:app --port 8000
+
+    # frontend
+    cd frontend
+    npm install
+    npm run dev
+
+## Models
+- `v1-pretrained` tag / `pretrained` branch: pre-trained face parser
+- Custom model: see the `v2-custom-model` release
+
 ## Features
 
 - Face parsing with a fine-tuned **BiSeNet + ResNet-18** model
