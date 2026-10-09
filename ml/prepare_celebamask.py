@@ -110,7 +110,7 @@ skipped = 0
 
 for image_path in image_files[:NUM_IMAGES]:
 
-    image_id = image_path.stem
+    image_id = image_path.stem.zfill(5)
 
     # --------------------------------------------------------
     # Read image
