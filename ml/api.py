@@ -1,3 +1,4 @@
+import os
 import threading
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -17,13 +18,25 @@ from pipeline import FaceAwarePipeline
 
 BASE_DIR = Path(__file__).resolve().parent
 
-MODEL_PATH = (
+DEFAULT_MODEL_PATH = (
     BASE_DIR.parent
     / "models"
     / "face_parser"
     / "training"
     / "bisenet_celebamask_best.pt"
 )
+
+# Overridden in Docker via the MODEL_PATH env var
+MODEL_PATH = Path(os.getenv("MODEL_PATH", str(DEFAULT_MODEL_PATH)))
+
+ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv(
+        "ALLOWED_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000",
+    ).split(",")
+    if o.strip()
+]
 
 MAX_UPLOAD_BYTES = 15 * 1024 * 1024
 MAX_SIDE = 2048
@@ -97,7 +110,7 @@ app.add_middleware(
 def health():
     return {
         "status": "ok",
-        "model": "bisenet_celebamask_best.pt",
+        "model": MODEL_PATH.name,
     }
 
 

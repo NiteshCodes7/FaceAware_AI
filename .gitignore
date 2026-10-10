@@ -20,3 +20,6 @@ outputs/
 models/
 datasets/
 runs/
+
+.vscode/
+face-parsing-temp/

@@ -1,0 +1,13 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+outputs/
+*.jpg
+*.jpeg
+*.png
+*.pt
+test_pipeline.py
+train_parser.py
+evaluate_parser.py
+prepare_celebamask.py
