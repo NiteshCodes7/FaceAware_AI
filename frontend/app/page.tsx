@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, type DragEvent } from "react";
+import { useEffect, useState, type DragEvent } from "react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const DEFAULT_API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 const CONTROLS = [
   { key: "skin_strength", label: "Skin", initial: 50 },
@@ -27,8 +27,21 @@ export default function Home() {
       Object.fromEntries(CONTROLS.map((c) => [c.key, c.initial])) as Record<
         Key,
         number
-      >
+      >,
   );
+
+  const [apiUrl, setApiUrl] = useState(DEFAULT_API);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("apiUrl");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (saved) setApiUrl(saved);
+  }, []);
+
+  function saveApiUrl(v: string) {
+    setApiUrl(v);
+    localStorage.setItem("apiUrl", v);
+  }
 
   function loadFile(f: File | undefined) {
     if (!f) return;
@@ -61,7 +74,7 @@ export default function Home() {
         form.append(c.key, String(values[c.key] / 100));
       }
 
-      const res = await fetch(`${API_URL}/enhance`, {
+      const res = await fetch(`${apiUrl.trim().replace(/\/$/, "")}/enhance`, {
         method: "POST",
         body: form,
       });
@@ -71,7 +84,7 @@ export default function Home() {
         throw new Error(
           typeof body?.detail === "string"
             ? body.detail
-            : `Request failed (${res.status})`
+            : `Request failed (${res.status})`,
         );
       }
 
@@ -79,7 +92,13 @@ export default function Home() {
       if (enhancedUrl) URL.revokeObjectURL(enhancedUrl);
       setEnhancedUrl(URL.createObjectURL(blob));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
+      setError(
+        e instanceof Error
+          ? e.message === "Failed to fetch"
+            ? "Cannot reach the backend. Check that it is running and the Backend URL is correct."
+            : e.message
+          : "Something went wrong.",
+      );
     } finally {
       setLoading(false);
     }
@@ -94,6 +113,20 @@ export default function Home() {
             Region-Aware Facial Enhancement
           </p>
         </header>
+
+        {/* Backend URL */}
+        <div className="mb-6 flex items-center gap-3">
+          <label htmlFor="api" className="shrink-0 text-sm text-neutral-400">
+            Backend URL
+          </label>
+          <input
+            id="api"
+            value={apiUrl}
+            onChange={(e) => saveApiUrl(e.target.value)}
+            placeholder="https://xxxx.trycloudflare.com"
+            className="flex-1 rounded-md border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 outline-none focus:border-indigo-500"
+          />
+        </div>
 
         {/* Image panels */}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
