@@ -8,7 +8,7 @@ from analysis.skin_analyzer import SkinAnalyzer
 from enhancement.skin_smoother import SkinSmoother
 from enhancement.engine import EnhancementEngine
 
-IMAGE_PATH = "test3.jpg"
+IMAGE_PATH = "test.jpeg"
 MODEL_PATH = "../models/face_parser/resnet18.pt"
 
 

@@ -4,7 +4,7 @@ import numpy as np
 from enhancement.glasses import GlassesEnhancer
 from enhancement.lens_detector import LensDetector
 
-IMAGE_PATH = "test5.jpg"
+IMAGE_PATH = "test4.jpg"
 
 image = cv2.imread(IMAGE_PATH)
 if image is None:
