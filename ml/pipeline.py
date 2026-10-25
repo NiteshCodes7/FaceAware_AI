@@ -28,6 +28,7 @@ from enhancement.teeth import TeethEnhancer
 from enhancement.glasses import GlassesEnhancer
 from enhancement.lens_detector import LensDetector
 from enhancement.wrinkles import WrinkleEnhancer
+from enhancement.eyebrow_enhancer import EyebrowEnhancer
 
 
 # ============================================================
@@ -104,6 +105,7 @@ class FaceAwarePipeline:
         self.teeth_enhancer = TeethEnhancer()
         self.glasses_enhancer = GlassesEnhancer()
         self.wrinkle_enhancer = WrinkleEnhancer()
+        self.eyebrow_enhancer = EyebrowEnhancer()
 
         # ----------------------------------------------------
         # Lens detector
@@ -126,7 +128,8 @@ class FaceAwarePipeline:
         iris_strength=0.0,
         teeth_strength=0.0,
         glasses_strength=0.0,
-        wrinkle_strength=0.0
+        wrinkle_strength=0.0,
+        eyebrow_strength=0.0,
     ):
 
         if image is None:
@@ -161,6 +164,8 @@ class FaceAwarePipeline:
         region_extractor = RegionExtractor(
             parsing
         )
+
+        eyebrow_mask = region_extractor.get_eyebrows()
 
         skin_mask = region_extractor.get_skin()
 
@@ -369,7 +374,7 @@ class FaceAwarePipeline:
                     strength=glasses_strength
                 )
 
-                # ====================================================
+        # ====================================================
         # STEP 11
         # Wrinkle reduction
         # ====================================================
@@ -412,8 +417,22 @@ class FaceAwarePipeline:
                 wrinkle_mask,
                 strength=wrinkle_strength
             )
+
         # ====================================================
         # STEP 12
+        # Eyebrow Enhancement
+        # ====================================================
+
+        if eyebrow_strength > 0:
+
+            result = self.eyebrow_enhancer.enhance(
+                result,                          
+                brow_mask=eyebrow_mask,          # binary 0/255 from RegionExtractor
+                strength=eyebrow_strength,
+            )
+        
+        # ====================================================
+        # STEP 13
         # Final output
         # ====================================================
 

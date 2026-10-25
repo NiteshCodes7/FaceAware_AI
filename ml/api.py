@@ -150,6 +150,10 @@ def enhance(
     wrinkle_strength: float = Form(
         0.0, ge=0.0, le=1.0
     ),
+
+    eyebrow_strength: float = Form(
+        0.0, ge=0.0, le=1.0
+    ),
 ):
 
     # -----------------------------------------------------
@@ -205,13 +209,14 @@ def enhance(
         result = state["pipeline"].process(
             img,
 
-            skin_strength=skin_strength,
-            eye_strength=eye_strength,
-            iris_strength=iris_strength,
-            eye_bag_strength=eye_bag_strength,
-            teeth_strength=teeth_strength,
-            glasses_strength=glasses_strength,
-            wrinkle_strength=wrinkle_strength,
+            skin_strength = skin_strength,
+            eye_strength = eye_strength,
+            iris_strength = iris_strength,
+            eye_bag_strength = eye_bag_strength,
+            teeth_strength = teeth_strength,
+            glasses_strength = glasses_strength,
+            wrinkle_strength = wrinkle_strength,
+            eyebrow_strength = eyebrow_strength,
         )
 
     # -----------------------------------------------------

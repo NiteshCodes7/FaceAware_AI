@@ -8,7 +8,7 @@ from pipeline import FaceAwarePipeline
 # ============================================================
 
 IMAGE_PATH = "test.jpeg"         
-MODEL_PATH = "../models/face_parser/resnet18.pt"
+MODEL_PATH = "../models/face_parser/training/bisenet_celebamask_best.pt"
 OUTPUT_DIR = "outputs"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -22,6 +22,7 @@ ZERO = dict(
     teeth_strength=0.0,
     glasses_strength=0.0,
     wrinkle_strength=0.0,
+    eyebrow_strength = 0.0,
 )
 
 TESTS = {
@@ -30,6 +31,10 @@ TESTS = {
     "eye_50":     dict(eye_strength=0.5),
     "iris_50":    dict(iris_strength=0.5),
     "eye_bag_50": dict(eye_bag_strength=0.5),
+    "eyebrow_25": dict(eyebrow_strength=0.25),
+    "eyebrow_50": dict(eyebrow_strength=0.50),
+    "eyebrow_75": dict(eyebrow_strength=0.75),
+    "eyebrow_100": dict(eyebrow_strength=1.0),
     "teeth_50":   dict(teeth_strength=0.5),
     "wrinkles_50": dict(wrinkle_strength=0.5),
     "wrinkles_100": dict(wrinkle_strength=1.0),
@@ -44,6 +49,7 @@ TESTS = {
         iris_strength=0.4,
         teeth_strength=0.5,
         wrinkle_strength=0.5,
+        eyebrow_strength = 0.5,
     ),
     "full": dict(
         skin_strength=0.4,
@@ -53,6 +59,7 @@ TESTS = {
         teeth_strength=0.5,
         glasses_strength=0.8,
         wrinkle_strength=0.5,
+        eyebrow_strength = 0.5,
     ),
 }
 
