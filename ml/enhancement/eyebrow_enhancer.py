@@ -129,8 +129,7 @@ class EyebrowEnhancer:
         enhanced = cv2.cvtColor(cv2.merge([L, A, B]), cv2.COLOR_LAB2BGR)
 
         # 5. Soft blend inside the mask only
-        alpha = cv2.GaussianBlur(brow_mask.astype(np.float32) / 255.0,
-                                 (0, 0), max(1.0, size * 0.0012))
+        alpha = cv2.GaussianBlur(brow_mask.astype(np.float32) / 255.0, (0, 0), max(1.0, size * 0.0012))
         alpha = (np.clip(alpha, 0, 1) * (0.85 + 0.15 * strength))[:, :, None]
 
         result = image.astype(np.float32) * (1.0 - alpha) + enhanced.astype(np.float32) * alpha
