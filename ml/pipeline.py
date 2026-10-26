@@ -29,6 +29,7 @@ from enhancement.glasses import GlassesEnhancer
 from enhancement.lens_detector import LensDetector
 from enhancement.wrinkles import WrinkleEnhancer
 from enhancement.eyebrow_enhancer import EyebrowEnhancer
+from enhancement.hair import HairEnhancer
 
 
 # ============================================================
@@ -106,6 +107,7 @@ class FaceAwarePipeline:
         self.glasses_enhancer = GlassesEnhancer()
         self.wrinkle_enhancer = WrinkleEnhancer()
         self.eyebrow_enhancer = EyebrowEnhancer()
+        self.hair_enhancer = HairEnhancer()
 
         # ----------------------------------------------------
         # Lens detector
@@ -122,14 +124,15 @@ class FaceAwarePipeline:
     def process(
         self,
         image,
-        skin_strength=0.0,
-        eye_bag_strength=0.0,
-        eye_strength=0.0,
-        iris_strength=0.0,
-        teeth_strength=0.0,
-        glasses_strength=0.0,
-        wrinkle_strength=0.0,
-        eyebrow_strength=0.0,
+        skin_strength = 0.0,
+        eye_bag_strength = 0.0,
+        eye_strength = 0.0,
+        iris_strength = 0.0,
+        teeth_strength = 0.0,
+        glasses_strength = 0.0,
+        wrinkle_strength = 0.0,
+        eyebrow_strength = 0.0,
+        hair_strength = 0.0
     ):
 
         if image is None:
@@ -172,6 +175,8 @@ class FaceAwarePipeline:
         glasses_mask = region_extractor.get_glasses()
 
         mouth_mask = region_extractor.get_mouth()
+
+        hair_mask = region_extractor.get_hair()
 
         # ====================================================
         # STEP 3
@@ -427,8 +432,21 @@ class FaceAwarePipeline:
 
             result = self.eyebrow_enhancer.enhance(
                 result,                          
-                brow_mask=eyebrow_mask,          # binary 0/255 from RegionExtractor
-                strength=eyebrow_strength,
+                brow_mask = eyebrow_mask,          # binary 0/255 from RegionExtractor
+                strength = eyebrow_strength,
+            )
+
+        # ====================================================
+        # STEP 13
+        # Hair Enhancement
+        # ====================================================
+
+        if hair_strength > 0:
+
+            result = self.hair_enhancer.enhance(
+                result,                          
+                segmentation_mask = hair_mask,
+                strength = hair_strength,
             )
         
         # ====================================================

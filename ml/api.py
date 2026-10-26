@@ -154,6 +154,9 @@ def enhance(
     eyebrow_strength: float = Form(
         0.0, ge=0.0, le=1.0
     ),
+    hair_strength: float = Form(
+        0.0, ge=0.0, le=1.0
+    ),
 ):
 
     # -----------------------------------------------------
@@ -217,6 +220,7 @@ def enhance(
             glasses_strength = glasses_strength,
             wrinkle_strength = wrinkle_strength,
             eyebrow_strength = eyebrow_strength,
+            hair_strength = hair_strength,
         )
 
     # -----------------------------------------------------

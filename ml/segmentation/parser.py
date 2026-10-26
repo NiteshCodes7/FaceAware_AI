@@ -11,7 +11,7 @@ class FaceParser:
     def __init__(
         self,
         model_path,
-        image_size=512
+        image_size = 512
     ):
 
         self.image_size = image_size
@@ -24,15 +24,15 @@ class FaceParser:
 
         # Create BiSeNet model
         self.model = BiSeNet(
-            num_classes=19,
-            backbone_name="resnet18"
+            num_classes = 19,
+            backbone_name = "resnet18"
         )
 
         # Load trained weights
         self.model.load_state_dict(
             torch.load(
                 model_path,
-                map_location=self.device
+                map_location = self.device
             )
         )
 
@@ -90,7 +90,7 @@ class FaceParser:
         # Get class with highest probability
         prediction = torch.argmax(
             output,
-            dim=1
+            dim = 1
         )
 
         # Remove batch dimension

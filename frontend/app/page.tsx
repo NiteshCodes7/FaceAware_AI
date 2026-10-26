@@ -13,6 +13,7 @@ const CONTROLS = [
   { key: "glasses_strength", label: "Glasses", initial: 80 },
   { key: "wrinkle_strength", label: "Wrinkles", initial: 40 },
   { key: "eyebrow_strength", label: "Eyebrows", initial: 20 },
+  { key: "hair_strength", label: "Hair", initial: 20 },
 ] as const;
 
 type Key = (typeof CONTROLS)[number]["key"];

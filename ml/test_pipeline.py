@@ -23,6 +23,7 @@ ZERO = dict(
     glasses_strength=0.0,
     wrinkle_strength=0.0,
     eyebrow_strength = 0.0,
+    hair_strength = 0.0
 )
 
 TESTS = {
@@ -42,6 +43,9 @@ TESTS = {
     "glasses_50":  dict(glasses_strength=0.5),
     "glasses_75":  dict(glasses_strength=0.75),
     "glasses_100": dict(glasses_strength=1.0),
+    "hair_25": dict(hair_strength = 0.25),
+    "hair_75": dict(hair_strength = 0.75),
+    "hair_100": dict(hair_strength = 0.100),
     "combined": dict(
         skin_strength=0.4,
         eye_bag_strength=0.4,
@@ -50,6 +54,7 @@ TESTS = {
         teeth_strength=0.5,
         wrinkle_strength=0.5,
         eyebrow_strength = 0.5,
+        hair_strength = 0.5,
     ),
     "full": dict(
         skin_strength=0.4,
@@ -60,6 +65,7 @@ TESTS = {
         glasses_strength=0.8,
         wrinkle_strength=0.5,
         eyebrow_strength = 0.5,
+        hair_strength = 0.5,
     ),
 }
 
