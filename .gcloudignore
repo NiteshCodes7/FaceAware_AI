@@ -1,4 +1,5 @@
-﻿.gcloudignore
+﻿# Git and environment
+.gcloudignore
 .git
 .gitignore
 .env
@@ -6,7 +7,23 @@
 !.env.example
 .venv/
 venv/
+node_modules/
+
+# Python cache
 __pycache__/
 **/__pycache__/
 *.pyc
-node_modules/
+
+# Dataset and test images
+datasets/
+dataset/
+frontend/
+test_images/
+tests/images/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.bmp
+*.tif
+*.tiff
