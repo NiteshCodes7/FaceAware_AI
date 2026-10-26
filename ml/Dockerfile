@@ -1,27 +1,25 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1 libglib2.0-0 \
+    libgl1 \
+    libglib2.0-0 \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m -u 1000 user
-USER user
-ENV PATH="/home/user/.local/bin:$PATH" \
-    PYTHONUNBUFFERED=1
-WORKDIR /home/user/app
+COPY ml/requirements.txt /app/requirements.txt
 
-COPY --chown=user requirements.txt .
-RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu \
- && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY --chown=user . .
+COPY . /app
 
-ENV WEIGHTS_TAG=v2-custom-model \
-    WEIGHTS_FILE=bisenet_celebamask_best.pt \
-    WEIGHTS_DIR=/home/user/app/weights \
-    MODEL_PATH=/home/user/app/weights/bisenet_celebamask_best.pt
+WORKDIR /app/ml
 
-RUN python scripts/download_weights.py
+EXPOSE 8080
 
-EXPOSE 7860
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port ${PORT:-8080}"]
