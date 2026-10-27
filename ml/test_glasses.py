@@ -1,38 +1,17 @@
 import cv2
 import numpy as np
 
-from enhancement.glasses import GlassesEnhancer
-from enhancement.lens_detector import LensDetector
+from enhancement.glasses import GlassesEnhancer 
+from enhancement.lens_detector import LensDetector            
 
-IMAGE_PATH = "test4.jpg"
+img = cv2.imread("test4.jpg")
 
-image = cv2.imread(IMAGE_PATH)
-if image is None:
-    raise RuntimeError(f"Could not load image: {IMAGE_PATH}")
+lens = LensDetector(radius=0.5).detect(img)
+out = GlassesEnhancer().remove_glare(img, np.zeros(img.shape[:2], np.uint8), lens, strength=1.0)
 
-# Auto lens mask
-lens_mask = LensDetector().detect(image)
-cv2.imwrite("lens_mask.png", lens_mask)
+# overlay to check the lens mask is on the lenses
+overlay = img.copy()
+overlay[lens > 0] = (overlay[lens > 0] * 0.5 + np.array([0, 255, 0]) * 0.5).astype(np.uint8)
 
-# Debug overlay (check that green covers both full lenses)
-vis = image.copy()
-vis[lens_mask > 127] = (
-    vis[lens_mask > 127] * 0.6 + np.array([0, 255, 0]) * 0.4
-).astype(np.uint8)
-cv2.imwrite("lens_mask_debug.jpg", vis)
-
-# Glare mask is detected inside remove_glare, so pass an empty one
-glare_mask = np.zeros(image.shape[:2], np.uint8)
-
-enhancer = GlassesEnhancer()
-
-for strength in [0.25, 0.5, 0.75, 1.0]:
-    result = enhancer.remove_glare(
-        image=image,
-        glare_mask=glare_mask,
-        lens_mask=lens_mask,
-        strength=strength,
-    )
-    out = f"glasses_glare_removed_{int(strength * 100)}.jpg"
-    cv2.imwrite(out, result)
-    print("Generated:", out)
+cv2.imwrite("result4.png", np.hstack([img, overlay, out]))   # original | lens mask | fixed
+print("saved result.png")
